@@ -30,33 +30,65 @@ namespace MyClassesTest
         }
         #endregion
 
+        #region Class Initialize and Cleanup
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext tc)
+        {
+            tc.WriteLine("ClassInitialize");
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+
+        }
+        #endregion
+
+        #region Test Initialize and Cleanup
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            TestContext.WriteLine("TestInitialize");
+            SetGoodFileName();
+            if (TestContext.TestName == "FileNameDoesExist")
+            {
+                if (!string.IsNullOrEmpty(_GoodFileName))
+                {
+                    TestContext.WriteLine("Creating file:" + _GoodFileName);
+                    File.AppendAllText(_GoodFileName, "Some Text");
+                }
+            }
+
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            //Delete file
+            if (File.Exists(_GoodFileName))
+            {
+                TestContext.WriteLine("Deleting file: " + _GoodFileName);
+                File.Delete(_GoodFileName);
+            }
+        }
+        #endregion
+
         [TestMethod]
+        [Owner("Smill")]
         public void FileNameDoesExist()
         {
             bool fromCall;
             FileProccess fp = new FileProccess();
 
-            SetGoodFileName();
-            if (!string.IsNullOrEmpty(_GoodFileName))
-            {
-                TestContext.WriteLine("Creating file:" + _GoodFileName);
-                File.AppendAllText(_GoodFileName, "Some Text");
-            }
-
             TestContext.WriteLine("Checking file: " + _GoodFileName);
             fromCall = fp.FileExists(_GoodFileName);
-
-            //Delete file
-            if(File.Exists(_GoodFileName))
-            {
-                TestContext.WriteLine("Deleting file: " + _GoodFileName);
-                File.Delete(_GoodFileName);
-            }
 
             Assert.IsTrue(fromCall);
         }
 
         [TestMethod]
+        [Owner("Smill")]
         public void FileNameDoesNotExist()
         {
             bool fromCall;
@@ -67,6 +99,7 @@ namespace MyClassesTest
         }
 
         [TestMethod]
+        [Owner("Pedro")]
         public void FileNameNullOrEmpty_ThrowsArgumentNullException()
         {
             FileProccess fp = new FileProccess();
@@ -86,6 +119,7 @@ namespace MyClassesTest
         }
 
         [TestMethod]
+        [Owner("Smill")]
         [ExpectedException(typeof(ArgumentNullException))]
         public void FileNameNullOrEmpty_ThrowsArgumentNullException_UsingAttribute()
         {
@@ -95,6 +129,7 @@ namespace MyClassesTest
         }
 
         [TestMethod]
+        [Ignore]
         public void FileNameIsWhiteSpace()
         {
             Assert.Inconclusive();

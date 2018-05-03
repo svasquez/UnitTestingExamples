@@ -41,8 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileProccess.cs" />
+    <Compile Include="PersonClasses\Employee.cs" />
+    <Compile Include="PersonClasses\Person.cs" />
+    <Compile Include="PersonClasses\PersonManager.cs" />
+    <Compile Include="PersonClasses\Supervisor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
